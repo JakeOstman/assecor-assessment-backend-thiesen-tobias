@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using FavoriteColorApi.Models;
+using FavoriteColorApi.Services.DataLoader;
 
 namespace FavoriteColorApi.Services
 {
@@ -7,9 +8,9 @@ namespace FavoriteColorApi.Services
     {
         private readonly List<Person> _persons;
 
-        public PersonService(CsvDataLoader loader)
+        public PersonService(CsvDataLoader loader) // TODO: CsvDataReader nutzen?
         {
-            _persons = loader.LoadPersons();
+            this._persons = loader.LoadPersons();
         }
 
         public List<Person> GetAll() => this._persons;
