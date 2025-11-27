@@ -3,11 +3,11 @@
     public class Person
     {
         public int Id { get; set; }
-        public required string Name { get; set; }
-        public required string LastName { get; set; }
-        public required string ZipCode { get; set; }
-        public required string City { get; set; }
-        public required string Color { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string ZipCode { get; set; } = string.Empty;
+        public string City { get; set; } = string.Empty;
+        public int Color { get; set; } = -1;
     }
 
 }
