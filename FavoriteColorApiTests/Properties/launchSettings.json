@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "FavoriteColorApiTests (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "FavoriteColorApiTests (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
