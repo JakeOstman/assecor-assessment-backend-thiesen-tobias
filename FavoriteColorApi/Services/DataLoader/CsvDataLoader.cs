@@ -47,17 +47,17 @@
                 if (pending != null)
                 {
                     var combinedRecord = CombineRows(pending, record);
-                    TryMapAndAdd(combinedRecord, this.expectedFieldsPerRecord, result);
+                    TryMapAndAdd(combinedRecord, this.expectedFieldsPerRecord, result, rownumber);
                     pending = null;
 
-                    rownumber = SetRowNumberAsId(rownumber, result[rownumber]);
+                    rownumber++;
                     continue;
                 }
 
                 if (record.Length >= this.expectedFieldsPerRecord)
                 {
-                    TryMapAndAdd(record, this.expectedFieldsPerRecord, result);
-                    rownumber = SetRowNumberAsId(rownumber, result[rownumber]);
+                    TryMapAndAdd(record, this.expectedFieldsPerRecord, result, rownumber);
+                    rownumber++;
                     continue;
                 }
 
@@ -66,8 +66,8 @@
 
             if (pending != null)
             {
-                TryMapAndAdd(pending, this.expectedFieldsPerRecord, result);
-                rownumber = SetRowNumberAsId(rownumber, result[rownumber]);
+                TryMapAndAdd(pending, this.expectedFieldsPerRecord, result, rownumber);
+                rownumber++;
             }
 
             return result;
@@ -81,7 +81,7 @@
             return list.ToArray();
         }
 
-        private static void TryMapAndAdd(string[] fields, int expectedFields, List<Person> output)
+        private static void TryMapAndAdd(string[] fields, int expectedFields, List<Person> output, int personId)
         {
             try
             {
@@ -99,6 +99,7 @@
 
                 var p = new Person
                 {
+                    Id = personId,
                     LastName = fields.Length > 0 ? fields[0] : string.Empty,
                     Name = fields.Length > 1 ? fields[1] : string.Empty,
                     Color = int.TryParse(fields[3], NumberStyles.Integer, CultureInfo.InvariantCulture, out var colorId) ? colorId : 0,
@@ -133,12 +134,6 @@
             }
 
             return splittedZipCodeAndCity;
-        }
-
-        private static int SetRowNumberAsId(int rownumber, Person person)
-        {
-            person.Id = rownumber;
-            return rownumber++;
         }
     }
 
