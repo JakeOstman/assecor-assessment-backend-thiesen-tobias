@@ -123,15 +123,13 @@
 
         private static string[] SplitZipCodeAndCity(string zipCodeAndCity)
         {
-            string[] splittedZipCodeAndCity = [string.Empty, string.Empty];
-            var match = Regex.Match(zipCodeAndCity, @"^(?<zipCode>\d{5})\s+(?<city>.+)$");
+            string[] splittedZipCodeAndCity = new string[2];
             var match = Regex.Match(zipCodeAndCity.TrimStart(), @"^(?<zipCode>\d{5})\s+(?<city>.+)$");
 
             if (match.Success)
             {
-                splittedZipCodeAndCity = new string[2];
-                _ = splittedZipCodeAndCity.Append(match.Groups["zipCode"].Value);
-                _ = splittedZipCodeAndCity.Append(match.Groups["city"].Value);
+                splittedZipCodeAndCity[0] = match.Groups["zipCode"].Value;
+                splittedZipCodeAndCity[1] = match.Groups["city"].Value;
             }
 
             return splittedZipCodeAndCity;
