@@ -1,4 +1,5 @@
-﻿using FavoriteColorApi.Models;
+﻿using System.Drawing;
+using FavoriteColorApi.Models;
 using FavoriteColorApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +17,11 @@ namespace FavoriteColorApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Person> GetAllPersons() => this._service.GetAll();
+        public ActionResult<IEnumerable<Person>> GetAllPersons()
+        {
+            var persons = this._service.GetAll();
+            return persons is null || !persons.Any() ? this.NotFound() : this.Ok(persons);
+        }
 
         [HttpGet("{id}")]
         public ActionResult<Person> GetPersonById(int id)
@@ -26,7 +31,7 @@ namespace FavoriteColorApi.Controllers
         }
 
         [HttpGet("color/{color}")]
-        public ActionResult<Person> GetPersonsByColorId(string color)
+        public ActionResult<IEnumerable<Person>> GetPersonsByColor(string color)
         {
             var persons = this._service.GetPersonsByColor(color);
             return persons is null || !persons.Any() ? this.NotFound() : this.Ok(persons);

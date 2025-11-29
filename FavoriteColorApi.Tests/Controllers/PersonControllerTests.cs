@@ -16,7 +16,7 @@ namespace FavoriteColorApi.Tests.Controllers
     [TestClass]
     public class PersonControllerTests
     {
-        private readonly PersonService _personService = new PersonService(
+        private readonly IPersonService _personService = new PersonService(
         new CsvDataLoader("..\\..\\..\\..\\FavoriteColorApi\\Data\\sample-input.csv"));
         private readonly Mock<IPersonService> mockService = new Mock<IPersonService>();
 
@@ -25,31 +25,45 @@ namespace FavoriteColorApi.Tests.Controllers
         [TestMethod]
         public void GetAllPersons_ReturnsAllPersons()
         {
-            this.mockService.Setup(s => s.GetAll()).Returns(new List<Person>
-            {
-                new Person { Id = 1, Name = "Max" },
-                new Person { Id = 2, Name = "Anna" }
-            });
+            var controller = new PersonController(this._personService);
+            var result = controller.GetAllPersons();
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType<OkObjectResult>(result.Result);
 
-            var controller = new PersonController(mockService.Object);
-            var persons = controller.GetAllPersons();
+            var okObjectResult = result.Result as OkObjectResult;
+            Assert.IsNotNull(okObjectResult);
 
+            var persons = okObjectResult.Value as IEnumerable<Person>;
             Assert.IsNotNull(persons);
-            Assert.AreEqual(2, persons.Count());
+            Assert.IsInstanceOfType<IEnumerable<Person>>(persons);
+            Assert.AreEqual(10, persons.Count());
 
             foreach (var person in persons)
             {
                 Assert.IsNotNull(person);
                 Assert.IsFalse(string.IsNullOrEmpty(person.Name));
+
+                if (person.Id == 0)
+                {
+                    Assert.AreEqual("Hans", person.Name);
+                }
+
+                if (person.Id == 1)
+                {
+                    Assert.AreEqual("Peter", person.Name);
+                }
+
+                if (person.Id == 9)
+                {
+                    Assert.AreEqual("Klaus", person.Name);
+                }
             }
         }
 
         [TestMethod]
         public void GetPersonById_ReturnsPerson_WhenFound()
         {
-            this.mockService.Setup(s => s.GetById(1)).Returns(new Person { Id = 1, Name = "Hans" });
-
-            var controller = new PersonController(this.mockService.Object);
+            var controller = new PersonController(this._personService);
 
             var result = controller.GetPersonById(1);
             Assert.IsNotNull(result);
@@ -63,16 +77,59 @@ namespace FavoriteColorApi.Tests.Controllers
             Assert.IsInstanceOfType<Person>(person);
 
             Assert.AreEqual(1, person.Id);
-            Assert.AreEqual("Hans", person.Name);
+            Assert.AreEqual("Peter", person.Name);
         }
 
         [TestMethod]
         public void GetPersonById_ReturnsNotFound_WhenMissing()
         {
-            this.mockService.Setup(s => s.GetById(99)).Returns((Person?)null);
-
-            var controller = new PersonController(this.mockService.Object);
+            var controller = new PersonController(this._personService);
             var result = controller.GetPersonById(99);
+
+            Assert.IsInstanceOfType<NotFoundResult>(result.Result);
+        }
+
+        [TestMethod]
+        public void GetPersonByColor_ReturnsPerson_WhenFound()
+        {
+            string searchedColor = "grün";
+
+            var controller = new PersonController(this._personService);
+            var result = controller.GetPersonsByColor(searchedColor);
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType<OkObjectResult>(result.Result);
+
+            var okObjectResult = result.Result as OkObjectResult;
+            Assert.IsNotNull(okObjectResult);
+
+            var persons = okObjectResult.Value as IEnumerable<Person>;
+            Assert.IsNotNull(persons);
+            Assert.IsInstanceOfType<IEnumerable<Person>>(persons);
+            Assert.AreEqual(3, persons.Count());
+
+            foreach (var person in persons)
+            {
+                Assert.IsNotNull(person);
+                Assert.IsFalse(string.IsNullOrEmpty(person.Name));
+                Assert.AreEqual(searchedColor, person.Color);
+            }
+
+            var personWithId2 = persons.Where(p => p.Id == 2);
+            Assert.IsNotNull(personWithId2);
+            
+            var personWithId7 = persons.Where(p => p.Id == 7);
+            Assert.IsNotNull(personWithId7);
+
+            var personWithId10 = persons.Where(p => p.Id == 10);
+            Assert.IsNotNull(personWithId10);
+        }
+
+        [TestMethod]
+        public void GetPersonByColor_ReturnsNotFound_WhenMissing()
+        {
+            var controller = new PersonController(this._personService);
+            var result = controller.GetPersonsByColor("weiß");
 
             Assert.IsInstanceOfType<NotFoundResult>(result.Result);
         }
