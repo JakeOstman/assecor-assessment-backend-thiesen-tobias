@@ -16,13 +16,20 @@ namespace FavoriteColorApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Person> Get() => this._service.GetAll();
+        public IEnumerable<Person> GetAllPersons() => this._service.GetAll();
 
         [HttpGet("{id}")]
-        public ActionResult<Person> Get(int id)
+        public ActionResult<Person> GetPersonById(int id)
         {
             var person = this._service.GetById(id);
             return person is null ? this.NotFound() : this.Ok(person);
+        }
+
+        [HttpGet("color/{colorId}")]
+        public ActionResult<Person> GetPersonsByColorId(int colorId)
+        {
+            var persons = this._service.GetPersonsByColor(colorId);
+            return persons is null || persons.Count == 0 ? this.NotFound() : this.Ok(persons);
         }
     }
 
