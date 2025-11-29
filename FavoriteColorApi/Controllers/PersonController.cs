@@ -25,10 +25,10 @@ namespace FavoriteColorApi.Controllers
             return person is null ? this.NotFound() : this.Ok(person);
         }
 
-        [HttpGet("color/{colorId}")]
-        public ActionResult<Person> GetPersonsByColorId(int colorId)
+        [HttpGet("color/{color}")]
+        public ActionResult<Person> GetPersonsByColorId(int color)
         {
-            var persons = this._service.GetPersonsByColor(colorId);
+            var persons = this._service.GetPersonsByColor(color);
             return persons is null || persons.Count == 0 ? this.NotFound() : this.Ok(persons);
         }
     }

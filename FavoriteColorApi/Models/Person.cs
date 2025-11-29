@@ -9,5 +9,4 @@
         public string City { get; set; } = string.Empty;
         public Color? Color { get; set; }
     }
-
 }
