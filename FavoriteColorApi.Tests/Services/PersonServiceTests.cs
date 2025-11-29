@@ -24,7 +24,7 @@ namespace FavoriteColorApi.Tests.Services
             var persons = this._personService.GetAll();
 
             Assert.IsNotNull(persons, "The returned list must not be null.");
-            Assert.AreEqual(10, persons.Count, "The list should contain exactly 10 items.");
+            Assert.AreEqual(10, persons.Count(), "The list should contain exactly 10 items.");
 
             foreach (var person in persons)
             {
@@ -61,11 +61,11 @@ namespace FavoriteColorApi.Tests.Services
             
             if (randomColorName.Equals("weiß"))
             {
-                Assert.IsTrue(condition: persons.Count == 0, "At least one person seems to have white as their favorite color.");
+                Assert.IsTrue(condition: !persons.Any(), "At least one person seems to have white as their favorite color.");
             }
             else
             {
-                Assert.IsTrue(condition: persons.Count > 0, "At least one person should be assigned to the color.");
+                Assert.IsTrue(condition: persons.Any(), "At least one person should be assigned to the color.");
             }
 
             foreach (Person person in  persons)
@@ -88,7 +88,7 @@ namespace FavoriteColorApi.Tests.Services
             Assert.AreEqual("grün", colorName);
 
             var persons = this._personService.GetPersonsByColor(colorName);
-            Assert.AreEqual(3, persons.Count, "The list should contain exactly 3 items.");
+            Assert.AreEqual(3, persons.Count(), "The list should contain exactly 3 items.");
 
             foreach (Person person in persons)
             {
@@ -102,7 +102,7 @@ namespace FavoriteColorApi.Tests.Services
             string color = "weiß";
             var persons = this._personService.GetPersonsByColor(color);
 
-            Assert.AreEqual(0, persons.Count, "The list should contain exactly 0 items.");
+            Assert.AreEqual(0, persons.Count(), "The list should contain exactly 0 items.");
         }
 
         private void WritePersonToConsole(Person person)

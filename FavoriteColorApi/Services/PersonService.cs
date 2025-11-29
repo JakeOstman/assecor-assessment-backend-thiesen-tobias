@@ -4,11 +4,11 @@ using FavoriteColorApi.Services.DataLoader;
 
 namespace FavoriteColorApi.Services
 {
-    public class PersonService(CsvDataLoader loader)
+    public class PersonService(CsvDataLoader loader) : IPersonService
     {
         private readonly List<Person> _persons = loader.LoadPersons();
 
-        public List<Person> GetAll() => this._persons;
+        public IEnumerable<Person> GetAll() => this._persons;
 
         public Person? GetById(int id) => this._persons.FirstOrDefault(p => p.Id == id);
 
@@ -23,7 +23,7 @@ namespace FavoriteColorApi.Services
             }
         }
 
-        public List<Person> GetPersonsByColor(string colorName)
+        public IEnumerable<Person> GetPersonsByColor(string colorName)
         {
             return this._persons.Where(p => p.Color == colorName).ToList();
         }

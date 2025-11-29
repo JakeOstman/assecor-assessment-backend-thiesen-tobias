@@ -6,11 +6,11 @@ namespace FavoriteColorApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PersonsController : ControllerBase
+    public class PersonController : ControllerBase
     {
-        private readonly PersonService _service;
+        private readonly IPersonService _service;
 
-        public PersonsController(PersonService service)
+        public PersonController(IPersonService service)
         {
             this._service = service;
         }
@@ -29,7 +29,7 @@ namespace FavoriteColorApi.Controllers
         public ActionResult<Person> GetPersonsByColorId(string color)
         {
             var persons = this._service.GetPersonsByColor(color);
-            return persons is null || persons.Count == 0 ? this.NotFound() : this.Ok(persons);
+            return persons is null || !persons.Any() ? this.NotFound() : this.Ok(persons);
         }
     }
 
