@@ -2,7 +2,7 @@
 {
     public class ColorNameProvider : IColorNameProvider
     {
-        private enum EColorName
+        public enum EColorName
         {
             blau = 1,
             grün,

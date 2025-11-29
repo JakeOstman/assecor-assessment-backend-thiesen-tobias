@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FavoriteColorApi.Models;
 using FavoriteColorApi.Services;
 using FavoriteColorApi.Services.DataLoader;
-using FavoriteColorApi.Models;
+using static FavoriteColorApi.Services.ColorNameProvider;
 
 namespace FavoriteColorApi.Tests.Services
 {
@@ -47,15 +48,50 @@ namespace FavoriteColorApi.Tests.Services
         }
 
         [TestMethod]
-        public void GetPersonsByRandomColorId_ReturnsExpectedObject()
-        {           
-            int colorId = Random.Shared.Next(1, 8);
-            var persons = this._personService.GetPersonsByColor(colorId);
+        public void GetPersonsByRandomColor_ReturnsExpectedObject()
+        {
+            var colorNames = Enum.GetValues(typeof(EColorName));
+            var randomColor = colorNames.GetValue(Random.Shared.Next(colorNames.Length))!;
+            Assert.IsNotNull(randomColor, "The returned object must not be null.");
+
+            EColorName colorEnum = (EColorName)randomColor;
+            string randomColorName = colorEnum.ToString();
+
+            var persons = this._personService.GetPersonsByColor(randomColorName);
+            
+            if (randomColorName.Equals("weiß"))
+            {
+                Assert.IsTrue(condition: persons.Count == 0, "At least one person seems to have white as their favorite color.");
+            }
+            else
+            {
+                Assert.IsTrue(condition: persons.Count > 0, "At least one person should be assigned to the color.");
+            }
 
             foreach (Person person in  persons)
             {
-                Assert.IsNotNull(person.Color, $"The returned subobject must not be null.");
+                this.WritePersonToConsole(person);
+            }
+        }
 
+        [TestMethod]
+        public void GetPersonsByColor_ReturnsExpectedObject()
+        {
+            int colorId = 2;
+            bool isColorNameDefined = Enum.IsDefined(typeof(EColorName), colorId);
+            Assert.IsTrue(isColorNameDefined, "Der Id-Wert sollte einem gültigen Enum-Wert entsprechen.");
+
+            var colorEnum = (EColorName)colorId;
+            Assert.AreEqual(EColorName.grün, colorEnum);
+
+            string colorName = colorEnum.ToString();
+            Assert.AreEqual("grün", colorName);
+
+            var persons = this._personService.GetPersonsByColor(colorName);
+            Assert.AreEqual(3, persons.Count, "The list should contain exactly 3 items.");
+
+            foreach (Person person in persons)
+            {
                 this.WritePersonToConsole(person);
             }
         }
@@ -63,8 +99,8 @@ namespace FavoriteColorApi.Tests.Services
         [TestMethod]
         public void GetPersonsByColorIdWhite_ReturnsExpectedObject()
         {
-            int colorId = 7;
-            var persons = this._personService.GetPersonsByColor(colorId);
+            string color = "weiß";
+            var persons = this._personService.GetPersonsByColor(color);
 
             Assert.AreEqual(0, persons.Count, "The list should contain exactly 0 items.");
         }

@@ -26,7 +26,7 @@ namespace FavoriteColorApi.Controllers
         }
 
         [HttpGet("color/{color}")]
-        public ActionResult<Person> GetPersonsByColorId(int color)
+        public ActionResult<Person> GetPersonsByColorId(string color)
         {
             var persons = this._service.GetPersonsByColor(color);
             return persons is null || persons.Count == 0 ? this.NotFound() : this.Ok(persons);

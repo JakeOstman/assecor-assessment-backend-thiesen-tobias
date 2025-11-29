@@ -23,9 +23,9 @@ namespace FavoriteColorApi.Services
             }
         }
 
-        public List<Person> GetPersonsByColor(int colorId)
+        public List<Person> GetPersonsByColor(string colorName)
         {
-            return this._persons.Where(p => p.Color?.Id == colorId).ToList();
+            return this._persons.Where(p => p.Color == colorName).ToList();
         }
     }
 

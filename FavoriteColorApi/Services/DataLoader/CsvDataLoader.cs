@@ -104,7 +104,7 @@
                     Id = personId,
                     LastName = fields.Length > 0 ? fields[0] : string.Empty,
                     Name = fields.Length > 1 ? fields[1].TrimStart() : string.Empty,
-                    Color = new Color(colorId, colorProvider),
+                    Color = colorProvider.GetColorName(colorId),
                 };
 
                 if (fields.Length > 2)
