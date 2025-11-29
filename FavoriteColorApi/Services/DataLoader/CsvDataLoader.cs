@@ -101,7 +101,7 @@
                 {
                     Id = personId,
                     LastName = fields.Length > 0 ? fields[0] : string.Empty,
-                    Name = fields.Length > 1 ? fields[1] : string.Empty,
+                    Name = fields.Length > 1 ? fields[1].TrimStart() : string.Empty,
                     Color = int.TryParse(fields[3], NumberStyles.Integer, CultureInfo.InvariantCulture, out var colorId) ? colorId : 0,
                 };
 
@@ -125,6 +125,7 @@
         {
             string[] splittedZipCodeAndCity = [string.Empty, string.Empty];
             var match = Regex.Match(zipCodeAndCity, @"^(?<zipCode>\d{5})\s+(?<city>.+)$");
+            var match = Regex.Match(zipCodeAndCity.TrimStart(), @"^(?<zipCode>\d{5})\s+(?<city>.+)$");
 
             if (match.Success)
             {
