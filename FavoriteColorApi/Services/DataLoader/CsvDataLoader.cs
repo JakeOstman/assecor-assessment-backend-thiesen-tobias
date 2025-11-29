@@ -97,12 +97,14 @@
                     fields = tmp;
                 }
 
+                ColorNameProvider colorProvider = new ColorNameProvider();
+                int colorId = int.TryParse(fields[3], NumberStyles.Integer, CultureInfo.InvariantCulture, out colorId) ? colorId : 0;
                 var p = new Person
                 {
                     Id = personId,
                     LastName = fields.Length > 0 ? fields[0] : string.Empty,
                     Name = fields.Length > 1 ? fields[1].TrimStart() : string.Empty,
-                    Color = int.TryParse(fields[3], NumberStyles.Integer, CultureInfo.InvariantCulture, out var colorId) ? colorId : 0,
+                    Color = new Color(colorId, colorProvider),
                 };
 
                 if (fields.Length > 2)

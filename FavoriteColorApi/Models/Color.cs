@@ -9,12 +9,17 @@ namespace FavoriteColorApi.Models
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
 
-        Color(int id, IColorNameProvider colorNameProvider)
+        public Color(int id, IColorNameProvider colorNameProvider)
         {
             this._colorNameProvider = colorNameProvider;
 
             this.Id = id;
             this.Name = this._colorNameProvider.GetColorName(id);
+        }
+
+        public override string ToString()
+        {
+            return this.Name;
         }
     }
 }

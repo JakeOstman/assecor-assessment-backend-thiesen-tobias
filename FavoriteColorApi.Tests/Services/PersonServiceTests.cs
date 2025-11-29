@@ -31,7 +31,7 @@ namespace FavoriteColorApi.Tests.Services
                 this.TestContext.WriteLine("Name = " + person.Name);
                 this.TestContext.WriteLine("ZipCode = " + person.ZipCode);
                 this.TestContext.WriteLine("City = " + person.City);
-                this.TestContext.WriteLine("ColorId = " + person.Color.ToString());
+                this.TestContext.WriteLine("ColorId = " + person.Color?.ToString());
                 this.TestContext.WriteLine(string.Empty);
             }
         }

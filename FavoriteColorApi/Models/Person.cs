@@ -7,7 +7,7 @@
         public string LastName { get; set; } = string.Empty;
         public string ZipCode { get; set; } = string.Empty;
         public string City { get; set; } = string.Empty;
-        public int Color { get; set; } = -1;
+        public Color? Color { get; set; }
     }
 
 }
