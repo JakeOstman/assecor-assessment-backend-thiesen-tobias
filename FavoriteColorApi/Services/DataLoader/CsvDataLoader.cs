@@ -102,15 +102,15 @@
                 var p = new Person
                 {
                     Id = personId,
-                    LastName = fields.Length > 0 ? fields[0] : string.Empty,
-                    Name = fields.Length > 1 ? fields[1].TrimStart() : string.Empty,
+                    LastName = fields.Length > 0 ? RemoveSpecialCharacters(fields[0]) : string.Empty,
+                    Name = fields.Length > 1 ? RemoveSpecialCharacters(fields[1]) : string.Empty,
                     Color = colorProvider.GetColorName(colorId),
                 };
 
                 if (fields.Length > 2)
                 {
                     string[] zipCodeAndCity = new string[2];
-                    zipCodeAndCity = SplitZipCodeAndCity(fields[2]);
+                    zipCodeAndCity = SplitZipCodeAndCity(RemoveSpecialCharacters(fields[2]));
                     p.ZipCode = zipCodeAndCity[0];
                     p.City = zipCodeAndCity[1];
                 }
@@ -126,7 +126,7 @@
         private static string[] SplitZipCodeAndCity(string zipCodeAndCity)
         {
             string[] splittedZipCodeAndCity = new string[2];
-            var match = Regex.Match(zipCodeAndCity.TrimStart(), @"^(?<zipCode>\d{5})\s+(?<city>.+)$");
+            var match = Regex.Match(zipCodeAndCity, @"^(?<zipCode>\d{5})\s+(?<city>.+)$");
 
             if (match.Success)
             {
@@ -136,6 +136,11 @@
 
             return splittedZipCodeAndCity;
         }
-    }
 
+        private static string RemoveSpecialCharacters(string stringWithSpecialCharacters)
+        {
+            string result = Regex.Replace(stringWithSpecialCharacters, @"[^a-zA-Z0-9äöüÄÖÜß ]", "");
+            return result.TrimStart();
+        }
+    }
 }

@@ -26,7 +26,7 @@ namespace FavoriteColorApi.Tests.Services
             Assert.IsNotNull(persons, "The returned list must not be null.");
             Assert.AreEqual(10, persons.Count(), "The list should contain exactly 10 items.");
 
-            foreach (var person in persons)
+            foreach (var person in persons.OrderBy(p => p.Id))
             {
                 this.WritePersonToConsole(person);
             }
