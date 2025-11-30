@@ -1,3 +1,4 @@
+using FavoriteColorApi.Repositories;
 using FavoriteColorApi.Services;
 using FavoriteColorApi.Services.DataLoader;
 
@@ -8,13 +9,14 @@ builder.Services.AddSingleton(new CsvDataLoader("Data/sample-input.csv"));
 builder.Services.AddSingleton<PersonService>();
 builder.Services.AddSingleton<IColorNameProvider, ColorNameProvider>();
 
+builder.Services.AddScoped<CsvDataLoader>();
+builder.Services.AddScoped<IPersonRepository, CsvPersonRepository>();
+builder.Services.AddScoped<IPersonService, PersonService>();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddScoped<IPersonService, PersonService>();
-
 
 var app = builder.Build();
 

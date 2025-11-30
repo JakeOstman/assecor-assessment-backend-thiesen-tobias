@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FavoriteColorApi.Controllers;
 using FavoriteColorApi.Models;
+using FavoriteColorApi.Repositories;
 using FavoriteColorApi.Services;
 using FavoriteColorApi.Services.DataLoader;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +15,17 @@ namespace FavoriteColorApi.Tests.Controllers
     [TestClass]
     public class PersonControllerTests
     {
-        private readonly PersonController _personController = new PersonController(new PersonService(
-        new CsvDataLoader("..\\..\\..\\..\\FavoriteColorApi\\Data\\sample-input.csv")));
+        private readonly PersonController _personController;
 
-        public TestContext TestContext { get; set; }
+        public TestContext TestContext { get; set; } = null!;
+
+        public PersonControllerTests()
+        {
+            var csvLoader = new CsvDataLoader("..\\..\\..\\..\\FavoriteColorApi\\Data\\sample-input.csv");
+            var csvRepo = new CsvPersonRepository(csvLoader);
+            var personService = new PersonService(csvRepo);
+            this._personController = new PersonController(personService);
+        }
 
         [TestMethod]
         public void GetAllPersons_ReturnsAllPersons()

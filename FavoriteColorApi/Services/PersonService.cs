@@ -1,12 +1,11 @@
-﻿using CsvHelper;
-using FavoriteColorApi.Models;
-using FavoriteColorApi.Services.DataLoader;
+﻿using FavoriteColorApi.Models;
+using FavoriteColorApi.Repositories;
 
 namespace FavoriteColorApi.Services
 {
-    public class PersonService(CsvDataLoader loader) : IPersonService
+    public class PersonService(IPersonRepository personRepo) : IPersonService
     {
-        private readonly List<Person> _persons = loader.LoadPersons();
+        private readonly List<Person> _persons = personRepo.LoadPersons();
 
         public IEnumerable<Person> GetAll() => this._persons;
 

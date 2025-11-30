@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FavoriteColorApi.Controllers;
 using FavoriteColorApi.Models;
+using FavoriteColorApi.Repositories;
 using FavoriteColorApi.Services;
 using FavoriteColorApi.Services.DataLoader;
 using static FavoriteColorApi.Services.ColorNameProvider;
@@ -13,10 +15,16 @@ namespace FavoriteColorApi.Tests.Services
     [TestClass]
     public class PersonServiceTests
     {
-        private readonly PersonService _personService = new PersonService(
-                new CsvDataLoader("..\\..\\..\\..\\FavoriteColorApi\\Data\\sample-input.csv"));
+        private readonly PersonService _personService;
 
-        public TestContext TestContext { get; set; }
+        public TestContext TestContext { get; set; } = null!;
+
+        public PersonServiceTests()
+        {
+            var csvLoader = new CsvDataLoader("..\\..\\..\\..\\FavoriteColorApi\\Data\\sample-input.csv");
+            var csvRepo = new CsvPersonRepository(csvLoader);
+            this._personService = new PersonService(csvRepo);
+        }
 
         [TestMethod]
         public void GetPersons_ReturnsExpectedList()
