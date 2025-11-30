@@ -7,6 +7,6 @@ namespace FavoriteColorApi.Repositories
     {
         private readonly CsvDataLoader _loader = loader;
 
-        public List<Person> LoadPersons() => this._loader.LoadPersons();
+        public IEnumerable<Person> GetAllPersons() => this._loader.LoadPersons();
     }
 }

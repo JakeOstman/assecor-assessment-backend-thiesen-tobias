@@ -5,7 +5,7 @@ namespace FavoriteColorApi.Services
 {
     public class PersonService(IPersonRepository personRepo) : IPersonService
     {
-        private readonly List<Person> _persons = personRepo.LoadPersons();
+        private readonly List<Person> _persons = (List<Person>)personRepo.GetAllPersons();
 
         public IEnumerable<Person> GetAll() => this._persons;
 
