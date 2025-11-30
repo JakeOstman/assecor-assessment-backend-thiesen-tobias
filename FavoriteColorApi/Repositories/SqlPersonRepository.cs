@@ -10,26 +10,26 @@ namespace FavoriteColorApi.Repositories
 
         public SqlPersonRepository(PersonDbContext context)
         {
-            _context = context;
+            this._context = context;
         }
 
-        public IEnumerable<Person> GetAllPersons() => _context.Person.ToList();
+        public IEnumerable<Person> GetAllPersons() => this._context.Person.ToList();
 
-        public Person? GetById(int id) => _context.Person.FirstOrDefault(p => p.Id == id);
+        public Person? GetById(int id) => this._context.Person.FirstOrDefault(p => p.Id == id);
 
         public void Add(Person person)
         {
-            _context.Person.Add(person);
-            _context.SaveChanges();
+            this._context.Person.Add(person);
+            this._context.SaveChanges();
         }
 
         public void Update(Person person)
         {
-            _context.Person.Update(person);
-            _context.SaveChanges();
+            this._context.Person.Update(person);
+            this._context.SaveChanges();
         }
 
         public IEnumerable<Person> GetPersonsByColor(string color)
-            => _context.Person.Where(p => p.Color == color).ToList();
+            => this._context.Person.Where(p => p.Color == color).ToList();
     }
 }
