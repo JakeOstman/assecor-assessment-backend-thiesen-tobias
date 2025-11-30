@@ -8,25 +8,21 @@ using FavoriteColorApi.Models;
 using FavoriteColorApi.Services;
 using FavoriteColorApi.Services.DataLoader;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
-using static FavoriteColorApi.Services.ColorNameProvider;
 
 namespace FavoriteColorApi.Tests.Controllers
 {
     [TestClass]
     public class PersonControllerTests
     {
-        private readonly IPersonService _personService = new PersonService(
-        new CsvDataLoader("..\\..\\..\\..\\FavoriteColorApi\\Data\\sample-input.csv"));
-        private readonly Mock<IPersonService> mockService = new Mock<IPersonService>();
+        private readonly PersonController _personController = new PersonController(new PersonService(
+        new CsvDataLoader("..\\..\\..\\..\\FavoriteColorApi\\Data\\sample-input.csv")));
 
         public TestContext TestContext { get; set; }
 
         [TestMethod]
         public void GetAllPersons_ReturnsAllPersons()
         {
-            var controller = new PersonController(this._personService);
-            var result = controller.GetAllPersons();
+            var result = this._personController.GetAllPersons();
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType<OkObjectResult>(result.Result);
 
@@ -63,9 +59,7 @@ namespace FavoriteColorApi.Tests.Controllers
         [TestMethod]
         public void GetPersonById_ReturnsPerson_WhenFound()
         {
-            var controller = new PersonController(this._personService);
-
-            var result = controller.GetPersonById(1);
+            var result = this._personController.GetPersonById(1);
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType<OkObjectResult>(result.Result);
 
@@ -83,8 +77,7 @@ namespace FavoriteColorApi.Tests.Controllers
         [TestMethod]
         public void GetPersonById_ReturnsNotFound_WhenMissing()
         {
-            var controller = new PersonController(this._personService);
-            var result = controller.GetPersonById(99);
+            var result = this._personController.GetPersonById(99);
 
             Assert.IsInstanceOfType<NotFoundResult>(result.Result);
         }
@@ -94,8 +87,7 @@ namespace FavoriteColorApi.Tests.Controllers
         {
             string searchedColor = "grün";
 
-            var controller = new PersonController(this._personService);
-            var result = controller.GetPersonsByColor(searchedColor);
+            var result = this._personController.GetPersonsByColor(searchedColor);
 
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType<OkObjectResult>(result.Result);
@@ -128,8 +120,7 @@ namespace FavoriteColorApi.Tests.Controllers
         [TestMethod]
         public void GetPersonByColor_ReturnsNotFound_WhenMissing()
         {
-            var controller = new PersonController(this._personService);
-            var result = controller.GetPersonsByColor("weiß");
+            var result = this._personController.GetPersonsByColor("weiß");
 
             Assert.IsInstanceOfType<NotFoundResult>(result.Result);
         }
