@@ -61,7 +61,7 @@
                     continue;
                 }
 
-                pending = record;
+                pending = record.Where(r => !string.IsNullOrWhiteSpace(r)).ToArray();
             }
 
             if (pending != null)
